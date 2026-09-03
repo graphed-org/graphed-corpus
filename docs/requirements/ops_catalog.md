@@ -47,6 +47,7 @@ deliver it. "Extract, do not invent": every row below is exercised by a runnable
 | **weight systematic** | reweight without changing selection (b-tag/photon SF up/down) | ttbar_*_btag_*, ttgamma_pho_* | M7 |
 | **kinematic systematic** | JES/JER shift that **re-runs selection** + observables | ttbar_*_jes_*, ttgamma_jes_* | M7 |
 | process × variation axis | the AGC histogram layout | ttbar_*, ttgamma_* | M7 |
+| **`vary` / `Varied`** (RDF-`Vary` analogue) | one program builds weight + kinematic-shift universes carried as a variation axis through fills and variation-aware skim write-out | ttbar_*, ttgamma_* (nominal, jes_±, btag_±, pho_±) | m48–m51 |
 | correctionlib scale factor | SF from a content-hashed JSON (here: a stand-in fn) | ttbar_* (b-tag), ttgamma_* (photon) | M3 (External node), M9 (payload) |
 | ONNX ML inference | model eval as an External node | *(catalogued; fixture is Phase-2 — needs a real/onnx model)* | M7 / M9 |
 | CartesianSelection / >64 categories | beyond coffea PackedSelection limit (PocketCoffea) | *(catalogued; Phase-2 executor constraint)* | M7 (Phase 2) |
@@ -72,5 +73,7 @@ deliver it. "Extract, do not invent": every row below is exercised by a runnable
 
 - Real AGC/NanoAOD data slice + CMS-published reference (replacing the synthetic dataset).
 - ONNX ttbar-reconstruction inference fixture (needs a real model file → External/PayloadDescriptor).
-- Systematics-as-a-graph-axis (named axes / template instantiation) — cf. RDataFrame `Vary`.
+- A first-class Rust `Vary` NodeKey and user-declared variation axes (template instantiation) — the
+  `graphed.vary`/`Varied` frontend and its sink variation axis shipped in the MVP (m48–m51; Section C);
+  these deeper in-IR forms stay Phase-2. cf. RDataFrame `Vary`.
 - CartesianSelection / >64-category selection as a real executor stress fixture.
