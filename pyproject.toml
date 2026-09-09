@@ -52,7 +52,10 @@ ignore = ["E501"]
 [tool.mypy]
 python_version = "3.12"
 strict = true
-files = ["src"]
+files = ["src", "tests"]
+# tests/frozen/m05 is on pytest's pythonpath: its tests import the sibling conftest by
+# bare name, so mypy needs the same root to resolve them (no __init__.py, flat module names).
+mypy_path = ["src", "tests/frozen/m05"]
 
 # awkward/hist are dynamically typed at the array level. hist ships partial stubs whose generic
 # BaseHist/Hist split fights --strict; treat both as untyped at the boundary (documented friction,
@@ -65,3 +68,10 @@ follow_imports = "skip"
 [[tool.mypy.overrides]]
 module = ["graphed_corpus.analyses.*", "graphed_corpus.dataset", "graphed_corpus.histograms"]
 warn_return_any = false
+
+# tests/frozen/** is read-only (root CLAUDE.md integrity rule), so the two errors it trips are
+# disabled by config rather than annotated. Both are the same mypy inference limitation: a lambda
+# with bound default args stored into a dict[str, Callable[...]] cannot be inferred.
+[[tool.mypy.overrides]]
+module = ["conftest"]
+disable_error_code = ["misc"]
